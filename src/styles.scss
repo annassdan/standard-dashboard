@@ -1,1 +1,15 @@
 /* You can add global styles to this file, and also import other style files */
+
+.mat-button, .mat-flat-button, .mat-raised-button, .mat-stroked-button {
+  border-radius: 50px !important;
+  padding: 0 20px !important;
+}
+
+
+.cdk-focused:focus {
+  outline: 0px dotted;
+}
+
+.spacer {
+  flex: 1 1 auto;
+}
