@@ -1,0 +1,95 @@
+<!--User Menu Options-->
+<mat-menu #userOptionsMenu="matMenu">
+  <!--Lazy load menu-->
+  <ng-template matMenuContent>
+    <button mat-menu-item>
+      <mat-icon>account_circle</mat-icon>
+      <span>Profil Pengguna&nbsp;&nbsp;&nbsp;&nbsp;</span>
+    </button>
+    <button disabled mat-menu-item>
+      <mat-icon>markunread_mailbox</mat-icon>
+      <span>Saran</span>
+    </button>
+    <mat-divider></mat-divider>
+    <button mat-menu-item>
+      <mat-icon color="warn">power_settings_new</mat-icon>
+      <span class="warn">Keluar</span>
+    </button>
+  </ng-template>
+</mat-menu>
+
+
+
+
+<div class="the-container cdk-focused">
+
+  <mat-progress-bar *ngIf="!hide" id="main-progress" color="accent" mode="indeterminate">
+  </mat-progress-bar>
+
+
+
+  <button #fake mat-flat-button></button>
+
+  <!--navigation bar -->
+  <mat-toolbar color="primary">
+
+
+    <button #nav mat-icon-button (click)="sidenav.toggle()">
+      <mat-icon>view_headline</mat-icon>
+    </button>
+
+    <h2 class="the-app-title">Balai Riset Perikanan Laut</h2>
+
+    <!--spacer-->
+    <span class="spacer"></span>
+
+
+    <!-- user menu on wide device -->
+    <button mat-icon-button [matMenuTriggerFor]="userOptionsMenu">
+      <mat-icon>settings</mat-icon>
+    </button>
+  </mat-toolbar>
+
+  <!--side nav bar -->
+  <mat-sidenav-container class="the-sidenav-container">
+
+    <mat-sidenav #sidenav
+                 [opened]="(rootState.asSmallSize$ | async)"
+                 id="the-sidenav"
+                 [mode]="(rootState.asSmallSize$ | async) ? 'side': 'over'">
+
+      <input #isLarge type="hidden" [value]="rootState.asSmallSize$ | async">
+      <button mat-menu-item [ngClass]="m.hasActive"
+              (click)="onMenuClicked(m, { sidenav: sidenav, isLarge: isLarge.value}, fake)"
+              *ngFor="let m of menuInstance">
+
+        <div class="the-sidenav-menu">
+          <mat-icon class="display-icon" [color]="m.isBack ? backCss : ''">{{m.icon}}</mat-icon>
+          <span [ngClass]="m.isBack ? backCss : ''">{{m.displayName}}</span>
+          <span class="spacer"></span>
+          <mat-icon class="expand-icon" *ngIf="m.hasChilds">{{m.rightIcon}}</mat-icon>
+        </div>
+
+      </button>
+
+    </mat-sidenav>
+
+    <mat-sidenav-content id="mainContentContainerId" class="mat-typography">
+
+      <button mat-flat-button (click)="current()">
+        CURRENT
+      </button>
+
+      <app-alat-tanngkap></app-alat-tanngkap>
+
+    </mat-sidenav-content>
+
+
+  </mat-sidenav-container>
+
+</div>
+
+
+
+
+

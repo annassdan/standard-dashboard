@@ -1,0 +1,103 @@
+@import "../../../assets/css/the-theme";
+
+$the-radius-sidenav-menu: 40px;
+$the-color-selectedt-sidenav: mat-color(mat-palette($color-primary, A700));
+$main-progress-height: 3px;
+
+.the-sidenav-container {
+  flex: 1;
+}
+
+.the-app-title {
+  margin-left: 7px !important;
+  margin-top: 3px !important;
+}
+
+
+
+
+
+
+.the-sidenav-menu {
+  margin-left: 9px;
+
+  .display-icon {
+    position: relative;
+    top: -2px;
+  }
+
+  .expand-icon {
+    float: right;
+    position: relative;
+    top: 12px;
+    right: -16px;
+  }
+}
+
+.the-container {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+
+
+  .mat-icon-button.cdk-focused.cdk-program-focused {
+    //background: #ff0a00 !important;
+    //background-color: mat-color(mat-palette($color-primary, 600)) !important;
+    //background-color: 0 !important;
+  }
+}
+
+
+#main-progress {
+  position: absolute;
+  height: $main-progress-height;
+}
+
+#the-sidenav {
+  border: 0px solid;
+  padding: 17px 5px 0px 0px;
+  width: 230px;
+  background: $the-bg-color;
+
+  .mat-list-item {
+    color: #555555;
+  }
+
+  ::ng-deep .mat-menu-item:hover:not([disabled]) {
+    background: $the-hover-component;
+    border-top-right-radius: $the-radius-sidenav-menu;
+    border-bottom-right-radius: $the-radius-sidenav-menu;
+  }
+
+  .mat-menu-item {
+    background: $the-bg-color;
+    margin-top: 4px;
+  }
+
+  .mat-menu-item.active{
+    background: mat-color(mat-palette($color-primary, 100));
+    color: $the-color-selectedt-sidenav;
+    font-weight: bold;
+    border-top-right-radius: $the-radius-sidenav-menu !important;
+    border-bottom-right-radius: $the-radius-sidenav-menu !important;
+
+    .mat-icon {
+      color: $the-color-selectedt-sidenav;
+    }
+  }
+
+
+}
+
+
+#mainContentContainerId {
+  background: $the-bg-color;
+  padding: 19px 24px 24px 29px;
+}
+
+
+
