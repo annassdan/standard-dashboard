@@ -1,10 +1,11 @@
-import {Component, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild} from '@angular/core';
+import {Compiler, Component, ComponentFactory, ElementRef, OnDestroy, OnInit, Renderer2, ViewChild, ViewContainerRef} from '@angular/core';
 import {DeviceDetectorService} from 'ngx-device-detector';
 import {BreakpointObserver} from '@angular/cdk/layout';
 import {MAX_WIDTH} from '../../shared/constants';
 import {MainStateService} from '../../shared/services/main-state.service';
 import {Subscription} from 'rxjs';
 import {MatButton} from '@angular/material';
+import {AlatTangkapComponent} from '../master/alat-tangkap/alat-tangkap.component';
 
 
 interface ToRoot {
@@ -31,14 +32,19 @@ interface MyMenu {
 })
 export class TheDashboardComponent implements OnInit, OnDestroy {
 
+  rightArrowChar = '→';
 
   /* buat fake trigger button, agar menghilangkan focus-program-cdk pada tombol navigasi */
   @ViewChild('fake', { read: MatButton, static: false }) fake;
+
+  @ViewChild('myContainer', {read: ViewContainerRef, static: false})
+  myContainer: ViewContainerRef;
 
   subscribers: Subscription[] = [];
   backCss = 'warn';
   collapsedIcon = 'chevron_right';
 
+  readonly dashboardIcon = 'dashboard';
   back = {
     name: 'back',
     displayName: 'Kembali',
@@ -61,7 +67,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
       hasActive: '',
       rightIcon: this.collapsedIcon,
       hasChilds: [
-        {...this.back, roots: {display: 'Data Dasar', names: ['data-dasar']} },
+        {...this.back, roots: {display: 'Data Dasar ', names: ['data-dasar']} },
         {
           name: 'unggah-data',
           displayName: 'Unggah Data',
@@ -83,7 +89,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
       hasActive: '',
       rightIcon: this.collapsedIcon,
       hasChilds: [
-        {...this.back, roots: {display: 'Pendataan', names: ['pendataan']} },
+        {...this.back, roots: {display: 'Pendataan ', names: ['pendataan']} },
         {
           name: 'pendaratan',
           displayName: 'Pendaratan',
@@ -103,7 +109,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
           hasActive: '',
           rightIcon: this.collapsedIcon,
           hasChilds: [
-            {...this.back, roots: {display: 'Biologi - Ukuran', names: ['pendataan', 'biologi']} },
+            {...this.back, roots: {display: 'Pendataan →  Biologi ', names: ['pendataan', 'biologi']} },
             {
               name: 'ukuran',
               displayName: 'Ukuran',
@@ -130,26 +136,27 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
   ];
 
 
-
   /* menu yang akan ditampilkan ke user */
   menuInstance: MyMenu[] = this.menus;
 
   /* menu yang terpilih */
   currentMenu = this.menus[0];
   currentMenuInstance: MyMenu[] = this.menus;
+  breadcrumbPrefixText = this.currentMenu.displayName;
+  breadcrumbPrefixIcon = this.dashboardIcon;
 
   hide = false;
 
+
   constructor(public deviceDetector: DeviceDetectorService,
               public rootState: MainStateService,
-              public renderer: Renderer2,
+              public compiler: Compiler,
               public breakpointObserver: BreakpointObserver) { }
 
   ngOnInit() {
     setTimeout(() => {
       this.hide = true
     }, 2000);
-
 
 
     /* listen untuk breakpointObserver */
@@ -160,12 +167,26 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     );
   }
 
+  isEmptyRoot() {
+    return this.currentMenuInstance.filter(value => value.isBack).length === 0;
+  }
+
+  pickBreadcrumb() {
+    const getted = <MyMenu[]> this.menuInstance.filter(value => value.isBack);
+    if (getted.length === 0) {
+      this.breadcrumbPrefixIcon = this.dashboardIcon;
+      this.breadcrumbPrefixText = this.currentMenu.displayName;
+      return;
+    }
+
+    this.breadcrumbPrefixIcon = this.currentMenu.icon;
+    this.breadcrumbPrefixText = getted[0].roots.display;
+  }
 
   ngOnDestroy(): void {
     this.subscribers.forEach(value => value.unsubscribe());
     this.subscribers = [];
   }
-
 
   backToRoot(m: MyMenu) {
     let topMenu = this.menus;
@@ -175,28 +196,30 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     let atRootNameIndex = 0;
     while (atRootNameIndex < lengthRootNames) {
       next = <MyMenu> topMenu.filter(v => v.name === m.roots.names[atRootNameIndex])[0];
-      if ((atRootNameIndex + 1) < lengthRootNames) {
+
+      if ((atRootNameIndex + 1) < lengthRootNames)
         topMenu = next.hasChilds;
-      }
+
       atRootNameIndex++;
     }
 
     this.menuInstance = topMenu;
   }
 
-  clear(m: MyMenu | MyMenu[]) {
+  clear(m: MyMenu | MyMenu[], except?: string) {
     let menus = [];
-    if ((<any[]> m).length) {
-      menus = [...(<any[]> m)];
-    } else {
+    if ((<any[]> m).length)
+      menus = (<MyMenu[]> m);
+    else
       menus.push(m);
-    }
 
     for (const menu of menus) {
+      if (except && menu.name === except)
+        continue;
+
       menu.hasActive = '';
-      if (menu.hasChilds) {
-        this.clear(menu.hasChilds);
-      }
+      if (menu.hasChilds)
+        this.clear(menu.hasChilds, except);
     }
   }
 
@@ -207,17 +230,17 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
       if (m.name === menu.name) {
         menu.hasActive = 'active';
         this.currentMenu = menu;
+        this.pickBreadcrumb();
       } else {
         this.clear(m);
       }
     }
   }
 
-  selectAllHisRootMenu(m: MyMenu) {
+  selectAllHisRootMenu(m: MyMenu, except) {
 
     for (const c of this.menus) {
-      if (c.name !== m.roots.names[0])
-      this.clear(c)
+      this.clear(c, except);
     }
 
     let topMenu = this.menus;
@@ -228,16 +251,15 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  onMenuClicked(menu: MyMenu, opt: any, nav) {
+  onMenuClicked(menu: MyMenu, opt: any) {
 
     if (menu.isBack) {
       this.backToRoot(menu);
     } else {
       /* akan di return jika yng terklik lagi dangan menu yang sama bila tidak mempunya child */
       if (!menu.hasChilds) {
-        if (this.currentMenu.name === menu.name) {
+        if (this.currentMenu.name === menu.name)
           return;
-        }
 
         if (opt.isLarge !== 'true') {
           opt.sidenav.toggle();
@@ -256,7 +278,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
         this.selectMenu(menu);
         const backs = this.menuInstance.filter(value => value.isBack);
         if (this.menuInstance.filter(value => value.isBack).length > 0) {
-          this.selectAllHisRootMenu(backs[0]);
+          this.selectAllHisRootMenu(backs[0], menu.name);
         }
       } else { /* jika menu mempunyai sub menu, maka menu yang ditampilkan adalah sub menunya */
         this.menuInstance = menu.hasChilds;
@@ -265,7 +287,18 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     }
   }
 
-  current() {
+  async current() {
+
+
+    // const module = await import('../master/alat-tangkap/alat-tangkap.module');
+    // const compiled = await this.compiler.compileModuleAndAllComponentsAsync(module.AlatTangkapModule);
+    // const factory = compiled.componentFactories.find((cf: ComponentFactory<any>) => cf.selector === 'app-alat-tangkap');
+    //
+    // if (factory) {
+    //   this.myContainer.createComponent(factory);
+    // }
+
+
 
     for (const cm of this.currentMenuInstance) {
       if (this.menuInstance.filter(value => value.name === cm.name).length === 0) {
@@ -276,4 +309,5 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
 
 
   }
+
 }

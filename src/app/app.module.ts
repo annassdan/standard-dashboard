@@ -5,7 +5,7 @@ import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
 import {BrowserAnimationsModule} from '@angular/platform-browser/animations';
 import {
-  MatButtonModule,
+  MatButtonModule, MatChipsModule,
   MatDividerModule,
   MatIconModule,
   MatListModule,
@@ -15,16 +15,18 @@ import {
   MatToolbarModule
 } from '@angular/material';
 import {TheDashboardComponent} from './ideas/the-dashboard/the-dashboard.component';
-import { AlatTanngkapComponent } from './ideas/master/alat-tanngkap/alat-tanngkap.component';
 import {DeviceDetectorModule} from 'ngx-device-detector';
 import {LayoutModule} from '@angular/cdk/layout';
-import {MainStateService} from './shared/services/main-state.service';
+import {AlatTangkapModule} from './ideas/master/alat-tangkap/alat-tangkap.module';
+import {AlatTangkapComponent} from './ideas/master/alat-tangkap/alat-tangkap.component';
+import { TextSkeletonComponent } from './shared/conponents/text-skeleton/text-skeleton.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     TheDashboardComponent,
-    AlatTanngkapComponent
+    AlatTangkapComponent,
+    TextSkeletonComponent
   ],
   imports: [
     BrowserModule,
@@ -35,6 +37,7 @@ import {MainStateService} from './shared/services/main-state.service';
     LayoutModule,
 
     MatButtonModule,
+    MatChipsModule,
     MatToolbarModule,
     MatIconModule,
     MatMenuModule,
@@ -43,7 +46,8 @@ import {MainStateService} from './shared/services/main-state.service';
     MatListModule,
     MatProgressBarModule,
 
-    DeviceDetectorModule.forRoot()
+    DeviceDetectorModule.forRoot(),
+    AlatTangkapModule
   ],
   providers: [],
   bootstrap: [AppComponent]

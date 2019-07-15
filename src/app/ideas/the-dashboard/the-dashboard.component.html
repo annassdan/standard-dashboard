@@ -38,7 +38,8 @@
       <mat-icon>view_headline</mat-icon>
     </button>
 
-    <h2 class="the-app-title">Balai Riset Perikanan Laut</h2>
+<!--    <h2 class="the-app-title">Balai Riset Perikanan Laut</h2>-->
+    <h2 class="the-app-title">Pendataan BRPL</h2>
 
     <!--spacer-->
     <span class="spacer"></span>
@@ -60,7 +61,7 @@
 
       <input #isLarge type="hidden" [value]="rootState.asSmallSize$ | async">
       <button mat-menu-item [ngClass]="m.hasActive"
-              (click)="onMenuClicked(m, { sidenav: sidenav, isLarge: isLarge.value}, fake)"
+              (click)="onMenuClicked(m, { sidenav: sidenav, isLarge: isLarge.value})"
               *ngFor="let m of menuInstance">
 
         <div class="the-sidenav-menu">
@@ -76,11 +77,30 @@
 
     <mat-sidenav-content id="mainContentContainerId" class="mat-typography">
 
-      <button mat-flat-button (click)="current()">
-        CURRENT
-      </button>
+      <!-- my breadcrumb -->
+      <h3 class="mat-typography">
+        <mat-chip-list>
+          <mat-icon class="my-color">{{currentMenu.icon}}</mat-icon>&nbsp;&nbsp;
+          {{breadcrumbPrefixText}}
+          <span *ngIf="!isEmptyRoot()">&nbsp;{{rightArrowChar}}&nbsp;</span>
 
-      <app-alat-tanngkap></app-alat-tanngkap>
+          <mat-chip *ngIf="!isEmptyRoot(); else tryFake" color="primary" selected>{{currentMenu.displayName}}</mat-chip>
+          <ng-template #tryFake>
+            <mat-chip class="fake-chip" selected></mat-chip>
+          </ng-template>
+        </mat-chip-list>
+      </h3>
+
+
+<!--      <button mat-flat-button (click)="current()">-->
+<!--        CURRENT-->
+<!--      </button>-->
+
+<!--      <div #myContainer></div>-->
+
+
+      <app-text-skeleton></app-text-skeleton>
+      <app-alat-tangkap></app-alat-tangkap>
 
     </mat-sidenav-content>
 
