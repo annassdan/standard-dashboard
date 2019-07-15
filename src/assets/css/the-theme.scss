@@ -1,0 +1,55 @@
+
+@import '../../../node_modules/@angular/material/theming';
+@include mat-core();
+
+$the-bg-color: #ededed;
+$the-hover-component: #d7d7d7;
+
+$the-font-size-1: 14px;
+$the-font-size-1-point-5: 17px;
+$the-font-size-2: 19px;
+$the-font-size-3: 23px;
+
+$the-font-color: #707070;
+
+/* deklarai warna tema yang diinginkan */
+$color-primary: $mat-blue;
+$color-accent: $mat-pink;
+$color-warn: $mat-deep-orange;
+
+$the-primary: mat-palette($color-primary, A700);
+$the-accent: mat-palette($color-accent, A200);
+$the-warn: mat-palette($color-warn);
+
+
+.primary { color: mat-color($the-primary); }
+.accent { color: mat-color($the-accent); }
+.warn { color: mat-color($the-warn); }
+.my-color { color: $the-font-color; }
+
+
+
+/* inisialisasi tema */
+$the-light-theme: mat-light-theme($the-primary, $the-accent, $the-warn);
+
+
+//$custom-typography: mat-typography-config($font-family: '"Roboto", sans-serif;');
+//$custom-typography: mat-typography-config($font-family: '"Rubik", sans-serif;');
+//$custom-typography: mat-typography-config($font-family: '"Open Sans", sans-serif;');
+//$custom-typography: mat-typography-config($font-family: '"Lato", sans-serif;');
+//$custom-typography: mat-typography-config($font-family: '"Roboto Condensed", sans-serif;');
+//$custom-typography: mat-typography-config($font-family: '"Source Sans Pro", sans-serif;');
+
+$general-typography: mat-typography-config(
+  $font-family: '"Source Sans Pro", "Helvetica Neue", sans-serif',
+  $body-1:        mat-typography-level($the-font-size-1, $the-font-size-2, 500),
+  $title: mat-typography-level($the-font-size-2, $the-font-size-3, 600),
+  $subheading-2: mat-typography-level($the-font-size-1-point-5, $the-font-size-2, 600)
+
+);
+
+@include mat-core($general-typography);
+
+/* bootstraping tema */
+@include angular-material-theme($the-light-theme);
+
