@@ -16,6 +16,7 @@ interface ToRoot {
 interface MyMenu {
   name?: string;
   displayName?: string;
+  description?: string;
   icon?: string;
   hasActive?: string;
   hasChilds?: MyMenu[];
@@ -41,7 +42,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
   myContainer: ViewContainerRef;
 
   subscribers: Subscription[] = [];
-  backCss = 'warn';
+  backCss = 'accent';
   collapsedIcon = 'chevron_right';
 
   readonly dashboardIcon = 'dashboard';
@@ -57,6 +58,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     {
       name: 'beranda',
       displayName: 'Beranda',
+      description: 'Halaman Utama Aplikasi',
       icon: 'dashboard',
       hasActive: 'active'
     },
@@ -71,12 +73,14 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
         {
           name: 'unggah-data',
           displayName: 'Unggah Data',
+          description: 'Proses Unggah Data Mentah dari Excel',
           icon: 'vertical_align_top',
           hasActive: ''
         },
         {
           name: 'input-data',
           displayName: 'Input Data',
+          description: 'Proses Input Data Mentah ke Sistem',
           icon: 'insert_drive_file',
           hasActive: ''
         }
@@ -93,12 +97,14 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
         {
           name: 'pendaratan',
           displayName: 'Pendaratan',
+          description: 'Daftar Pendataan untuk Pendaratan',
           icon: 'camera_rear',
           hasActive: ''
         },
         {
           name: 'operasional',
           displayName: 'Operasional',
+          description: 'Daftar Pendataan untuk Operasional',
           icon: 'camera_rear',
           hasActive: ''
         },
@@ -113,12 +119,14 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
             {
               name: 'ukuran',
               displayName: 'Ukuran',
+              description: 'Daftar Pendataan untuk Biologi Ukuran',
               icon: 'camera_rear',
               hasActive: ''
             },
             {
               name: 'reproduksi',
               displayName: 'Reproduksi',
+              description: 'Daftar Pendataan untuk Biologi Reproduksi',
               icon: 'camera_rear',
               hasActive: ''
             },
@@ -130,6 +138,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     {
       name: 'alat-tangkap',
       displayName: 'Alat Tangkap',
+      description: 'Daftar Alat Tangkap',
       icon: 'camera_rear',
       hasActive: ''
     },
@@ -163,7 +172,7 @@ export class TheDashboardComponent implements OnInit, OnDestroy {
     this.subscribers.push(
       this.breakpointObserver
         .observe([`(max-width: ${MAX_WIDTH}px)`])
-        .subscribe(state => this.rootState.smallSizeReached(!state.matches))
+        .subscribe(state => this.rootState.smallSizeReached(state.matches))
     );
   }
 

@@ -26,10 +26,9 @@
   <mat-progress-bar *ngIf="!hide" id="main-progress" color="accent" mode="indeterminate">
   </mat-progress-bar>
 
-
-
   <!--invisible fake button-->
   <button #fake mat-flat-button></button>
+
   <!--navigation bar -->
   <mat-toolbar color="primary">
 
@@ -38,8 +37,21 @@
       <mat-icon>view_headline</mat-icon>
     </button>
 
-<!--    <h2 class="the-app-title">Balai Riset Perikanan Laut</h2>-->
-    <h2 class="the-app-title">Pendataan BRPL</h2>
+    <h2 *ngIf="!(rootState.asSmallSize$ | async)" class="the-app-title">Pendataan BRPL</h2>
+    <!-- my breadcrumb -->
+    <h3 *ngIf="(rootState.asSmallSize$ | async)" class="mat-typography the-app-title">
+      <mat-chip-list>
+        {{breadcrumbPrefixText}}
+        <span *ngIf="!isEmptyRoot()">&nbsp;{{rightArrowChar}}&nbsp;</span>
+
+        <mat-chip *ngIf="!isEmptyRoot(); else tryFake" class="fake-chip fake-chip-color" selected>
+          <strong>{{currentMenu.displayName}}</strong>
+        </mat-chip>
+        <ng-template #tryFake>
+          <mat-chip class="primary" selected></mat-chip>
+        </ng-template>
+      </mat-chip-list>
+    </h3>
 
     <!--spacer-->
     <span class="spacer"></span>
@@ -55,11 +67,11 @@
   <mat-sidenav-container class="the-sidenav-container">
 
     <mat-sidenav #sidenav
-                 [opened]="(rootState.asSmallSize$ | async)"
+                 [opened]="!(rootState.asSmallSize$ | async)"
                  id="the-sidenav"
-                 [mode]="(rootState.asSmallSize$ | async) ? 'side': 'over'">
+                 [mode]="!(rootState.asSmallSize$ | async) ? 'side': 'over'">
 
-      <input #isLarge type="hidden" [value]="rootState.asSmallSize$ | async">
+      <input #isLarge type="hidden" [value]="!(rootState.asSmallSize$ | async)">
       <button mat-menu-item [ngClass]="m.hasActive"
               (click)="onMenuClicked(m, { sidenav: sidenav, isLarge: isLarge.value})"
               *ngFor="let m of menuInstance">
@@ -78,7 +90,7 @@
     <mat-sidenav-content id="mainContentContainerId" class="mat-typography">
 
       <!-- my breadcrumb -->
-      <h3 class="mat-typography">
+      <h3 *ngIf="!(rootState.asSmallSize$ | async)" class="mat-typography">
         <mat-chip-list>
           <mat-icon class="my-color">{{currentMenu.icon}}</mat-icon>&nbsp;&nbsp;
           {{breadcrumbPrefixText}}
@@ -89,6 +101,7 @@
             <mat-chip class="fake-chip" selected></mat-chip>
           </ng-template>
         </mat-chip-list>
+        <h5 style="margin-top: 3px;">{{currentMenu.description}}</h5>
       </h3>
 
 

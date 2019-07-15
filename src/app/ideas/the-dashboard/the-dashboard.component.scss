@@ -14,6 +14,7 @@ $main-progress-height: 3px;
 }
 
 .fake-chip { background: $the-bg-color !important; }
+.fake-chip-color { color: mat-color($the-primary) !important; }
 
 
 .the-sidenav-menu {
