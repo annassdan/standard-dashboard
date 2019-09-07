@@ -57,6 +57,8 @@
  */
 import 'zone.js/dist/zone';  // Included with Angular CLI.
 
+import 'intersection-observer'; // digunakan untuk detect viewport
+
 
 /***************************************************************************************************
  * APPLICATION IMPORTS

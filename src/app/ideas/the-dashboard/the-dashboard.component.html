@@ -3,7 +3,7 @@
   <!--Lazy load menu-->
   <ng-template matMenuContent>
     <button mat-menu-item>
-      <mat-icon>account_circle</mat-icon>
+      <mat-icon>insert_emoticon</mat-icon>
       <span>Profil Pengguna&nbsp;&nbsp;&nbsp;&nbsp;</span>
     </button>
     <button disabled mat-menu-item>
@@ -29,39 +29,70 @@
   <!--invisible fake button-->
   <button #fake mat-flat-button></button>
 
+  <div *ngIf="(rootState.searching$ | async) && (rootState.asSmallSize$ | async); else showNavBar"></div>
   <!--navigation bar -->
-  <mat-toolbar color="primary">
+  <ng-template #showNavBar>
+    <mat-toolbar color="primary">
+      <button #nav mat-icon-button (click)="sidenav.toggle()">
+        <mat-icon>view_headline</mat-icon>
+      </button>
 
 
-    <button #nav mat-icon-button (click)="sidenav.toggle()">
-      <mat-icon>view_headline</mat-icon>
-    </button>
-
-    <h2 *ngIf="!(rootState.asSmallSize$ | async)" class="the-app-title">Pendataan BRPL</h2>
-    <!-- my breadcrumb -->
-    <h3 *ngIf="(rootState.asSmallSize$ | async)" class="mat-typography the-app-title">
-      <mat-chip-list>
-        {{breadcrumbPrefixText}}
-        <span *ngIf="!isEmptyRoot()">&nbsp;{{rightArrowChar}}&nbsp;</span>
-
-        <mat-chip *ngIf="!isEmptyRoot(); else tryFake" class="fake-chip fake-chip-color" selected>
-          <strong>{{currentMenu.displayName}}</strong>
-        </mat-chip>
-        <ng-template #tryFake>
-          <mat-chip class="primary" selected></mat-chip>
-        </ng-template>
-      </mat-chip-list>
-    </h3>
-
-    <!--spacer-->
-    <span class="spacer"></span>
+      <h2 *ngIf="(rootState.asSmallSize$ | async) && !(rootState.breadcrumbAppear$ | async)" class="the-app-title">{{currentMenu.displayName}}</h2>
+      <h2 *ngIf="!(rootState.asSmallSize$ | async) && !(rootState.breadcrumbAppear$ | async)" class="the-app-title">
+        <mat-chip-list>
+          <span>{{breadcrumbPrefixText}}&nbsp;{{rootState.rightArrowChar}}&nbsp;</span>
+          <mat-chip class="fake-chip-on-title" selected>
+            <!--          <mat-icon>{{currentMenu.icon}}</mat-icon>          &nbsp;&nbsp;&nbsp;-->
+            <strong>{{currentMenu.displayName}}</strong>
+          </mat-chip>
+        </mat-chip-list>
+      </h2>
 
 
-    <!-- user menu on wide device -->
-    <button mat-icon-button [matMenuTriggerFor]="userOptionsMenu">
-      <mat-icon>settings</mat-icon>
-    </button>
-  </mat-toolbar>
+      <!-- jika breadcrumb terlihat di viewport -->
+      <ng-container *ngIf="rootState.breadcrumbAppear$ | async">
+        <h2 *ngIf="!(rootState.asSmallSize$ | async)" class="the-app-title">Form Pendataan RBPL</h2>
+        <h2 *ngIf="(rootState.asSmallSize$ | async)" class="the-app-title">Form BRPL</h2>
+      </ng-container>
+
+
+
+      <!--spacer-->
+      <span class="spacer"></span>
+
+
+
+      <h3 *ngIf="(rootState.asSmallSize$ | async) && breadcrumbPrefixText !== currentMenu.displayName" class="mat-typography the-app-title">
+        <mat-chip-list>
+          <mat-chip class="fake-chip-on-title" selected>
+            <!--          <mat-icon>{{currentMenu.icon}}</mat-icon>          &nbsp;&nbsp;&nbsp;-->
+            <strong>{{breadcrumbPrefixText}}</strong>
+          </mat-chip>
+        </mat-chip-list>
+      </h3>
+
+
+      <!-- user menu on wide device -->
+      <button mat-icon-button
+              (click)="minimizeElectronWindow()"
+              style="margin-top: -4px">
+        <mat-icon>minimize</mat-icon>
+      </button>
+      <button mat-icon-button (click)="closeElectronWindow()">
+        <mat-icon>clear</mat-icon>
+      </button>
+<!--      <button mat-icon-button [matMenuTriggerFor]="userOptionsMenu">-->
+<!--        <mat-icon>drag_indicator</mat-icon>-->
+<!--      </button>-->
+<!--      <button mat-icon-button [matMenuTriggerFor]="userOptionsMenu">-->
+<!--        <mat-icon>account_circle</mat-icon>-->
+<!--      </button>-->
+
+
+    </mat-toolbar>
+  </ng-template>
+
 
   <!--side nav bar -->
   <mat-sidenav-container class="the-sidenav-container">
@@ -89,31 +120,8 @@
 
     <mat-sidenav-content id="mainContentContainerId" class="mat-typography">
 
-      <!-- my breadcrumb -->
-      <h3 *ngIf="!(rootState.asSmallSize$ | async)" class="mat-typography">
-        <mat-chip-list>
-          <mat-icon class="my-color">{{currentMenu.icon}}</mat-icon>&nbsp;&nbsp;
-          {{breadcrumbPrefixText}}
-          <span *ngIf="!isEmptyRoot()">&nbsp;{{rightArrowChar}}&nbsp;</span>
-
-          <mat-chip *ngIf="!isEmptyRoot(); else tryFake" color="primary" selected>{{currentMenu.displayName}}</mat-chip>
-          <ng-template #tryFake>
-            <mat-chip class="fake-chip" selected></mat-chip>
-          </ng-template>
-        </mat-chip-list>
-        <h5 style="margin-top: 3px;">{{currentMenu.description}}</h5>
-      </h3>
-
-
-<!--      <button mat-flat-button (click)="current()">-->
-<!--        CURRENT-->
-<!--      </button>-->
-
-<!--      <div #myContainer></div>-->
-
-
-      <app-text-skeleton></app-text-skeleton>
       <app-alat-tangkap></app-alat-tangkap>
+<!--      <app-standard-ghost></app-standard-ghost>-->
 
     </mat-sidenav-content>
 

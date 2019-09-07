@@ -1,9 +1,38 @@
 /* You can add global styles to this file, and also import other style files */
 
+
+
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.18);
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+
+
+::-webkit-scrollbar {
+  width: 9px;
+}
+
 .mat-button, .mat-flat-button, .mat-raised-button, .mat-stroked-button {
   //border-radius: 50px !important;
   //padding: 0 20px !important;
+  //border-radius: 50px !important;
   padding: 0 15px !important;
+}
+
+.mat-form-field {
+  width: 100%;
 }
 
 

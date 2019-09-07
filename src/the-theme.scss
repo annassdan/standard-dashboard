@@ -1,9 +1,12 @@
 
-@import '../../../node_modules/@angular/material/theming';
+@import '../node_modules/@angular/material/theming';
 @include mat-core();
 
 $the-bg-color: #ededed;
+$the-on-search-bg-color: #dfdfdf;
+$the-on-search-box-border-color: #cdcdcd;
 $the-hover-component: #d7d7d7;
+$default-padding: 24px;
 
 $the-font-size-1: 14px;
 $the-font-size-1-point-5: 17px;
@@ -26,6 +29,8 @@ $the-warn: mat-palette($color-warn);
 .accent { color: mat-color($the-accent); }
 .warn { color: mat-color($the-warn); }
 .my-color { color: $the-font-color; }
+.my-bg-color { background: $the-bg-color !important;}
+.my-on-search-bg-color { background: $the-on-search-bg-color !important;}
 
 
 

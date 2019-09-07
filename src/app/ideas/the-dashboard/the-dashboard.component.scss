@@ -1,8 +1,9 @@
-@import "../../../assets/css/the-theme";
+@import "../../../the-theme";
 
 $the-radius-sidenav-menu: 40px;
 $the-color-selectedt-sidenav: mat-color(mat-palette($color-primary, A700));
 $main-progress-height: 3px;
+
 
 .the-sidenav-container {
   flex: 1;
@@ -13,8 +14,19 @@ $main-progress-height: 3px;
   margin-top: 3px !important;
 }
 
-.fake-chip { background: $the-bg-color !important; }
-.fake-chip-color { color: mat-color($the-primary) !important; }
+
+
+
+
+
+
+
+.fake-chip-on-title {
+  background: white !important;
+  color: mat-color($the-primary) !important;
+  padding: 2px 20px 2px 17px;
+}
+
 
 
 .the-sidenav-menu {
@@ -51,7 +63,7 @@ $main-progress-height: 3px;
 
 #the-sidenav {
   border: 0px solid;
-  padding: 17px 20px 0px 0px;
+  padding: ($default-padding - 8) ($default-padding - 4) 0px 0px;
   width: 230px;
   background: $the-bg-color;
 
@@ -89,7 +101,7 @@ $main-progress-height: 3px;
 #mainContentContainerId {
   background: $the-bg-color;
   //padding: 23px 24px 24px 29px;
-  padding: 29px 24px 24px 29px;
+  padding: ($default-padding + 5) $default-padding $default-padding ($default-padding + 5);
 }
 
 
